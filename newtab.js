@@ -141,12 +141,8 @@ async function render() {
   renderHeaderFavorites(favorites);
   if (!use_as_new_tab) { showDisabled(); return; }
   if (show_feed) { renderFeed(); return; }
-
-  const grid = el("div", { class: "favs", role: "list" });
-  favorites.slice(0, MAX_FAVS).forEach((f, i) => grid.append(favoriteTile(f, i, favorites)));
-  if (favorites.length < MAX_FAVS) grid.append(addTile());
-
-  main.append(grid);
+  // No body grid; favorites now live in header only
+  return;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
