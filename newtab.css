@@ -2,10 +2,10 @@
 body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg, #fafafa); color: var(--fg, #111); }
 @media (prefers-color-scheme: dark){ body { --bg: #0b0b0c; --fg: #f1f1f1; --muted: #9aa0a6; } }
 @media (prefers-color-scheme: light){ body { --bg: #fafafa; --fg: #111; --muted: #444; } }
-.header { display:flex; gap:16px; align-items:center; padding: 32px; justify-content:center; }
+.header { display:flex; gap:16px; align-items:center; padding: 24px 32px; justify-content:flex-start; }
 .logo { display:flex; align-items:center; gap:10px; font-weight: 700; letter-spacing: 0.3px; }
 .logo-img { width: 32px; height: 32px; border-radius: 8px; display:block; }
-.search { width: min(720px, 90vw); padding: 12px 14px; border-radius: 24px; border: 1px solid #ddd; background: transparent; color: inherit; }
+.header-favs { display:flex; gap:14px; flex-wrap: wrap; align-items:center; }
 main { display:flex; flex-direction: column; align-items:center; }
 .feed { width: min(1200px, 96vw); height: calc(100vh - 140px); position: relative; border-radius: 12px; overflow: hidden; border: 1px solid rgba(127,127,127,0.2); }
 .feed-frame { position:absolute; inset:0; width:100%; height:100%; border:0; background: transparent; }
