@@ -6,6 +6,7 @@ async function load() {
   document.getElementById("use_as_new_tab").checked = !!use_as_new_tab;
   document.getElementById("daily_open_enabled").checked = !!daily_open_enabled;
   document.getElementById("daily_open_time").value = daily_open_time;
+  document.getElementById("daily_open_time").disabled = !daily_open_enabled;
 }
 
 document.getElementById("use_as_new_tab").addEventListener("change", async (e) => {
@@ -14,6 +15,7 @@ document.getElementById("use_as_new_tab").addEventListener("change", async (e) =
 
 document.getElementById("daily_open_enabled").addEventListener("change", async (e) => {
   await chrome.storage.sync.set({ daily_open_enabled: e.target.checked });
+  document.getElementById("daily_open_time").disabled = !e.target.checked;
 });
 
 document.getElementById("daily_open_time").addEventListener("change", async (e) => {
@@ -30,6 +32,32 @@ document.getElementById("open_coffeebrk").addEventListener("click", async () => 
 
 document.getElementById("manage_favorites").addEventListener("click", async () => {
   await chrome.tabs.create({ url: "chrome://newtab/", active: true });
+});
+
+// Make entire switch label toggle the input and trigger change
+document.querySelectorAll('.switch').forEach((sw) => {
+  sw.addEventListener('click', (e) => {
+    if (e.target.tagName.toLowerCase() === 'input') return;
+    const input = sw.querySelector('input');
+    if (!input) return;
+    input.checked = !input.checked;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+});
+
+// Also allow clicking the whole row to toggle
+document.querySelectorAll('.row-toggle').forEach((row) => {
+  row.addEventListener('click', (e) => {
+    // Avoid toggling when clicking on interactive controls inside the row (input or button)
+    const tag = e.target.tagName.toLowerCase();
+    if (tag === 'input' || tag === 'button' || e.target.closest('label.switch')) return;
+    const inputId = row.getAttribute('data-input');
+    if (!inputId) return;
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.checked = !input.checked;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
 });
 
 load();

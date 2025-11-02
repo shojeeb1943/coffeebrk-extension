@@ -141,3 +141,10 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSearch();
   render();
 });
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'sync') return;
+  if (changes.use_as_new_tab || changes.favorites) {
+    render();
+  }
+});

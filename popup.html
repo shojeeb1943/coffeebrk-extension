@@ -19,9 +19,9 @@
     .label { color: var(--fg); font-size: 13px; }
     .sub { color: var(--muted); font-size: 12px; }
     .switch { position: relative; width: 42px; height: 24px; border-radius: 999px; cursor: pointer; display:inline-block; }
-    .switch input { appearance: none; position: absolute; inset:0; margin:0; z-index:3; cursor: pointer; }
-    .track { position:absolute; inset:0; background: var(--border); border:1px solid var(--border); border-radius:999px; transition: background-color .18s ease, border-color .18s ease; }
-    .knob { position:absolute; top:2px; left:2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .18s ease; z-index:2; }
+    .switch input { appearance: none; position: absolute; inset:0; margin:0; z-index:3; cursor: pointer; width:100%; height:100%; opacity:0; }
+    .track { position:absolute; inset:0; background: var(--border); border:1px solid var(--border); border-radius:999px; transition: background-color .18s ease, border-color .18s ease; pointer-events: none; }
+    .knob { position:absolute; top:2px; left:2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .18s ease; z-index:2; pointer-events: none; }
     .switch input:checked ~ .track { background: var(--accent); border-color: var(--accent); }
     .switch input:checked ~ .knob { transform: translateX(18px); }
     .controls { display:flex; gap: 8px; }
@@ -42,7 +42,7 @@
 
     <div class="card">
       <div class="section">
-        <div class="row">
+        <div class="row row-toggle" data-input="use_as_new_tab">
           <div>
             <div class="label">Use as New Tab</div>
             <div class="sub">Show Coffeebrk favorites on new tab</div>
@@ -54,7 +54,7 @@
           </label>
         </div>
 
-        <div class="row">
+        <div class="row row-toggle" data-input="daily_open_enabled">
           <div>
             <div class="label">Open Daily in Background</div>
             <div class="sub">Opens app.coffeebrk.ai once a day without stealing focus</div>
