@@ -11,9 +11,9 @@ function faviconFor(url) {
 }
 
 async function getState() {
-  const defaults = { use_as_new_tab: true, favorites: [] };
-  const { use_as_new_tab, favorites } = await chrome.storage.sync.get(defaults);
-  return { use_as_new_tab, favorites };
+  const defaults = { use_as_new_tab: true, favorites: [], show_feed: false };
+  const { use_as_new_tab, favorites, show_feed } = await chrome.storage.sync.get(defaults);
+  return { use_as_new_tab, favorites, show_feed };
 }
 
 function el(tag, attrs = {}, children = []) {
@@ -108,11 +108,25 @@ function openEditDialog(index, item) {
   document.getElementById("dlg_cancel").onclick = close;
 }
 
+function renderFeed() {
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+  const wrap = el('div', { class: 'feed' }, [
+    el('div', { class: 'feed-skeleton' }, [ 'Loading Coffeebrk…' ]),
+    el('iframe', { class: 'feed-frame', src: 'https://app.coffeebrk.ai/', referrerpolicy: 'no-referrer-when-downgrade', allow: 'clipboard-read; clipboard-write' })
+  ]);
+  main.append(wrap);
+  const iframe = wrap.querySelector('iframe');
+  const skel = wrap.querySelector('.feed-skeleton');
+  iframe.addEventListener('load', () => { skel.style.display = 'none'; });
+}
+
 async function render() {
-  const { use_as_new_tab, favorites } = await getState();
+  const { use_as_new_tab, favorites, show_feed } = await getState();
   const main = document.getElementById("main");
   main.innerHTML = "";
   if (!use_as_new_tab) { showDisabled(); return; }
+  if (show_feed) { renderFeed(); return; }
 
   const grid = el("div", { class: "favs", role: "list" });
   favorites.slice(0, MAX_FAVS).forEach((f, i) => grid.append(favoriteTile(f, i, favorites)));
@@ -144,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== 'sync') return;
-  if (changes.use_as_new_tab || changes.favorites) {
+  if (changes.use_as_new_tab || changes.favorites || changes.show_feed) {
     render();
   }
 });

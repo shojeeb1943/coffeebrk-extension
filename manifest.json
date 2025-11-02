@@ -5,6 +5,9 @@
   "description": "Quick AI/design favorites + optional new tab override. Daily Coffeebrk open.",
   "author": "coffeebrk.ai",
   "homepage_url": "https://coffeebrk.ai",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://app.coffeebrk.ai https://*.coffeebrk.ai;"
+  },
   "action": {
     "default_title": "Coffeebrk Daily",
     "default_popup": "popup.html",
