@@ -1,18 +1,13 @@
 const APP_URL = "https://app.coffeebrk.ai/";
 
 async function load() {
-  const defaults = { use_as_new_tab: true, daily_open_enabled: true, daily_open_time: "00:00", show_feed: false };
-  const { use_as_new_tab, daily_open_enabled, daily_open_time, show_feed } = await chrome.storage.sync.get(defaults);
-  document.getElementById("use_as_new_tab").checked = !!use_as_new_tab;
+  const defaults = { daily_open_enabled: true, daily_open_time: "00:00", show_feed: false };
+  const { daily_open_enabled, daily_open_time, show_feed } = await chrome.storage.sync.get(defaults);
   document.getElementById("daily_open_enabled").checked = !!daily_open_enabled;
   document.getElementById("daily_open_time").value = daily_open_time;
   document.getElementById("daily_open_time").disabled = !daily_open_enabled;
   document.getElementById("show_feed").checked = !!show_feed;
 }
-
-document.getElementById("use_as_new_tab").addEventListener("change", async (e) => {
-  await chrome.storage.sync.set({ use_as_new_tab: e.target.checked });
-});
 
 document.getElementById("daily_open_enabled").addEventListener("change", async (e) => {
   await chrome.storage.sync.set({ daily_open_enabled: e.target.checked });

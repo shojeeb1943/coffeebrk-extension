@@ -11,17 +11,29 @@ function faviconFor(url) {
 }
 
 async function getState() {
-  const defaults = { use_as_new_tab: true, favorites: [], show_feed: false };
-  const { use_as_new_tab, favorites, show_feed } = await chrome.storage.sync.get(defaults);
-  return { use_as_new_tab, favorites, show_feed };
+  const defaults = { favorites: [], show_feed: false };
+  const { favorites, show_feed } = await chrome.storage.sync.get(defaults);
+  return { favorites, show_feed };
 }
 
 function el(tag, attrs = {}, children = []) {
   const e = document.createElement(tag);
   Object.entries(attrs).forEach(([k, v]) => {
-    if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v);
+    if (k === "class") {
+      e.className = v;
+    } else if (k.startsWith("on")) {
+      e.addEventListener(k.slice(2).toLowerCase(), v);
+    } else {
+      e.setAttribute(k, v);
+    }
   });
-  children.forEach((c) => e.append(c));
+  children.forEach((c) => {
+    if (typeof c === 'string') {
+      e.appendChild(document.createTextNode(c));
+    } else {
+      e.appendChild(c);
+    }
+  });
   return e;
 }
 
@@ -37,39 +49,39 @@ function renderHeaderFavorites(favorites) {
   header.append(row);
 }
 
-function showDisabled() {
-  const main = document.getElementById("main");
-  main.innerHTML = "";
-  const msg = el("div", { class: "disabled" }, [
-    el("div", { class: "disabled-card" }, [
-      el("div", { class: "title" }, ["Coffeebrk new tab is disabled"]),
-      el("div", { class: "desc" }, ["Turn it on to see your quick-access favorites each time you open a new tab."]),
-      el("div", { class: "actions" }, [
-        el("button", { id: "enable", class: "btn-pill primary" }, ["Enable"]),
-        el("button", { id: "open_app", class: "btn-pill" }, ["Open Coffeebrk"])
-      ])
-    ])
-  ]);
-  main.append(msg);
-  document.getElementById("enable").addEventListener("click", async () => {
-    await chrome.storage.sync.set({ use_as_new_tab: true });
-    render();
-  });
-  document.getElementById("open_app").addEventListener("click", async () => {
-    await chrome.tabs.create({ url: "https://app.coffeebrk.ai/", active: true });
-  });
-}
 
 function favoriteTile(item, index, favs) {
-  const img = el("img", { src: faviconFor(item.url), alt: item.title || item.url, onerror: (e) => { e.target.src = FALLBACK_ICON; } });
+  const img = el("img", { src: faviconFor(item.url), alt: item.title || item.url });
+  img.addEventListener('error', () => { img.src = FALLBACK_ICON; });
+  
   const open = () => window.open(item.url, "_blank");
-  const actions = el("div", { class: "tile-actions" }, [
-    el("div", { class: "icon", title: "Edit", onclick: () => openEditDialog(index, favs[index]) }, ["✏️"]),
-    el("div", { class: "icon", title: "Delete", onclick: async () => { favs.splice(index, 1); await saveFavorites(favs); render(); } }, ["🗑"]) 
-  ]);
-  const btn = el("button", { class: "btn", draggable: true, ondragstart: (e) => onDragStart(e, index), ondragover: (e) => e.preventDefault(), ondrop: (e) => onDrop(e, index) }, [img]);
+  
+  const editIcon = el("div", { class: "icon", title: "Edit" }, ["✏️"]);
+  editIcon.addEventListener('click', () => openEditDialog(index, favs[index]));
+  
+  const deleteIcon = el("div", { class: "icon", title: "Delete" }, ["🗑"]);
+  deleteIcon.addEventListener('click', async () => { 
+    favs.splice(index, 1); 
+    await saveFavorites(favs); 
+    render(); 
+  });
+  
+  const actions = el("div", { class: "tile-actions" }, [editIcon, deleteIcon]);
+  
+  const btn = el("button", { class: "btn", draggable: true }, [img]);
+  btn.addEventListener('dragstart', (e) => onDragStart(e, index));
+  btn.addEventListener('dragover', (e) => e.preventDefault());
+  btn.addEventListener('drop', (e) => onDrop(e, index));
+  
+  const btnWrapper = el("div", {}, [btn]);
+  btnWrapper.addEventListener('click', open);
+  
   const title = el("div", { class: "tile-label" }, [item.title || domainFromUrl(item.url) || item.url]);
-  return el("div", { class: "tile", role: "button", tabindex: 0, onkeydown: (e) => { if (e.key === "Enter") open(); } }, [actions, el("div", { onclick: open }, [btn]), title]);
+  
+  const tile = el("div", { class: "tile", role: "button", tabindex: 0 }, [actions, btnWrapper, title]);
+  tile.addEventListener('keydown', (e) => { if (e.key === "Enter") open(); });
+  
+  return tile;
 }
 
 function addTile() {
@@ -116,8 +128,18 @@ function openEditDialog(index, item) {
     render();
   };
   const close = () => { dlg.style.display = "none"; };
-  document.getElementById("dlg_save").onclick = submit;
-  document.getElementById("dlg_cancel").onclick = close;
+  
+  const saveBtn = document.getElementById("dlg_save");
+  const cancelBtn = document.getElementById("dlg_cancel");
+  
+  // Remove old listeners
+  const newSaveBtn = saveBtn.cloneNode(true);
+  const newCancelBtn = cancelBtn.cloneNode(true);
+  saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+  cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+  
+  newSaveBtn.addEventListener('click', submit);
+  newCancelBtn.addEventListener('click', close);
 }
 
 function renderFeed() {
@@ -130,18 +152,27 @@ function renderFeed() {
   main.append(wrap);
   const iframe = wrap.querySelector('iframe');
   const skel = wrap.querySelector('.feed-skeleton');
-  iframe.addEventListener('load', () => { skel.style.display = 'none'; });
+  let loaded = false;
+  const onLoaded = () => { loaded = true; skel.style.display = 'none'; };
+  iframe.addEventListener('load', onLoaded);
+  // Fallback: if feed doesn't load quickly, open the app directly in this tab (avoids iframe restrictions)
+  setTimeout(async () => {
+    if (!loaded) {
+      try { location.replace('https://app.coffeebrk.ai/'); }
+      catch (e) { try { await chrome.tabs.update({ url: 'https://app.coffeebrk.ai/' }); } catch {} }
+    }
+  }, 2000);
 }
 
 async function render() {
-  const { use_as_new_tab, favorites, show_feed } = await getState();
+  const { favorites, show_feed } = await getState();
+  
   const main = document.getElementById("main");
+  if (!main) return; // Safety check
   main.innerHTML = "";
-  // Always show header favorites row (even if disabled)
+  // Always show header favorites row
   renderHeaderFavorites(favorites);
-  // If feed is enabled, it takes precedence regardless of use_as_new_tab
   if (show_feed) { renderFeed(); return; }
-  if (!use_as_new_tab) { showDisabled(); return; }
   // No body grid; favorites now live in header only
   return;
 }
@@ -152,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== 'sync') return;
-  if (changes.use_as_new_tab || changes.favorites || changes.show_feed) {
+  if (changes.favorites || changes.show_feed) {
     render();
   }
 });

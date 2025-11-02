@@ -3,12 +3,11 @@ const FEEDBACK_URL = "https://feedback.coffeebrk.ai/";
 const ALARM_NAME = "daily-open";
 
 async function getSettings() {
-  const { use_as_new_tab = true, daily_open_enabled = true, daily_open_time = "00:00" } = await chrome.storage.sync.get({
-    use_as_new_tab: true,
+  const { daily_open_enabled = true, daily_open_time = "00:00" } = await chrome.storage.sync.get({
     daily_open_enabled: true,
     daily_open_time: "00:00"
   });
-  return { use_as_new_tab, daily_open_enabled, daily_open_time };
+  return { daily_open_enabled, daily_open_time };
 }
 
 function computeNextTrigger(timeStr) {
@@ -35,7 +34,6 @@ chrome.runtime.onInstalled.addListener(async () => {
   const current = await chrome.storage.sync.get({ initialized: false });
   if (!current.initialized) {
     await chrome.storage.sync.set({
-      use_as_new_tab: true,
       daily_open_enabled: true,
       daily_open_time: "00:00",
       favorites: [],
@@ -60,3 +58,4 @@ chrome.storage.onChanged.addListener((changes, area) => {
     scheduleDailyAlarm();
   }
 });
+
