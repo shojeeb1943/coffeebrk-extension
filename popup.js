@@ -1,7 +1,7 @@
 const APP_URL = "https://app.coffeebrk.ai/";
 
 async function load() {
-  const defaults = { daily_open_enabled: true, daily_open_time: "00:00", show_feed: false };
+  const defaults = { daily_open_enabled: true, daily_open_time: "08:00", show_feed: true };
   const { daily_open_enabled, daily_open_time, show_feed } = await chrome.storage.sync.get(defaults);
   document.getElementById("daily_open_enabled").checked = !!daily_open_enabled;
   document.getElementById("daily_open_time").value = daily_open_time;

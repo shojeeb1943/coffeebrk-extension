@@ -34,8 +34,9 @@ chrome.runtime.onInstalled.addListener(async () => {
   const current = await chrome.storage.sync.get({ initialized: false });
   if (!current.initialized) {
     await chrome.storage.sync.set({
+      show_feed: true,
       daily_open_enabled: true,
-      daily_open_time: "00:00",
+      daily_open_time: "08:00",
       favorites: [],
       initialized: true
     });

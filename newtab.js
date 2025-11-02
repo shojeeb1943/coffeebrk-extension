@@ -11,7 +11,7 @@ function faviconFor(url) {
 }
 
 async function getState() {
-  const defaults = { favorites: [], show_feed: false };
+  const defaults = { favorites: [], show_feed: true };
   const { favorites, show_feed } = await chrome.storage.sync.get(defaults);
   return { favorites, show_feed };
 }
