@@ -126,7 +126,28 @@ async function render() {
   const main = document.getElementById("main");
   main.innerHTML = "";
   if (!use_as_new_tab) { showDisabled(); return; }
-  if (show_feed) { renderFeed(); return; }
+  if (show_feed) {
+    renderFeed();
+    // Build a floating dock with favorites over the feed
+    const feed = document.querySelector('.feed');
+    const dock = el('div', { class: 'dock' });
+    const panel = el('div', { class: 'dock-panel' });
+    panel.append(el('div', { class: 'dock-title' }, ['Favorites']));
+    const tiles = el('div', { class: 'dock-tiles' });
+    favorites.slice(0, MAX_FAVS).forEach((f, i) => tiles.append(favoriteTile({ ...f }, i, favorites)));
+    if (favorites.length < MAX_FAVS) tiles.append(addTile());
+    // shrink tiles
+    tiles.querySelectorAll('.tile').forEach(t => t.classList.add('small'));
+    panel.append(tiles);
+    const toggleBtn = el('button', { class: 'dock-toggle', onclick: () => {
+      const hidden = panel.style.display === 'none';
+      panel.style.display = hidden ? 'flex' : 'none';
+      toggleBtn.textContent = hidden ? 'Hide Favorites' : 'Show Favorites';
+    } }, ['Hide Favorites']);
+    dock.append(toggleBtn, panel);
+    feed.append(dock);
+    return;
+  }
 
   const grid = el("div", { class: "favs", role: "list" });
   favorites.slice(0, MAX_FAVS).forEach((f, i) => grid.append(favoriteTile(f, i, favorites)));

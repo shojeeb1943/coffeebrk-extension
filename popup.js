@@ -39,16 +39,7 @@ document.getElementById("manage_favorites").addEventListener("click", async () =
   await chrome.tabs.create({ url: "chrome://newtab/", active: true });
 });
 
-// Make entire switch label toggle the input and trigger change
-document.querySelectorAll('.switch').forEach((sw) => {
-  sw.addEventListener('click', (e) => {
-    if (e.target.tagName.toLowerCase() === 'input') return;
-    const input = sw.querySelector('input');
-    if (!input) return;
-    input.checked = !input.checked;
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  });
-});
+// Rely on label default behavior; do not re-toggle to avoid double flips
 
 // Also allow clicking the whole row to toggle
 document.querySelectorAll('.row-toggle').forEach((row) => {
