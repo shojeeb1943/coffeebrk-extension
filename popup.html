@@ -15,11 +15,11 @@
     .logo-img { width: 22px; height: 22px; border-radius: 5px; display:block; }
     .title { font-weight: 600; letter-spacing: .2px; }
     .section { display:flex; flex-direction:column; gap: 10px; margin: 12px 0; }
-    .row { display:flex; align-items:center; justify-content: space-between; gap: 10px; }
+    .row { display:flex; align-items:center; justify-content: space-between; gap: 10px; position: relative; }
     .label { color: var(--fg); font-size: 13px; }
     .sub { color: var(--muted); font-size: 12px; }
-    .switch { position: relative; width: 42px; height: 24px; border-radius: 999px; cursor: pointer; display:inline-block; }
-    .switch input { appearance: none; position: absolute; inset:0; margin:0; z-index:3; cursor: pointer; width:100%; height:100%; opacity:0; }
+    .switch { position: relative; width: 42px; height: 24px; border-radius: 999px; cursor: pointer; display:inline-block; user-select:none; }
+    .switch input { appearance: none; position: absolute; inset:0; margin:0; z-index:5; cursor: pointer; width:100%; height:100%; opacity:0; }
     .track { position:absolute; inset:0; background: var(--border); border:1px solid var(--border); border-radius:999px; transition: background-color .18s ease, border-color .18s ease; pointer-events: none; }
     .knob { position:absolute; top:2px; left:2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .18s ease; z-index:2; pointer-events: none; }
     .switch input:checked ~ .track { background: var(--accent); border-color: var(--accent); }

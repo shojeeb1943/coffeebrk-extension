@@ -41,19 +41,8 @@ document.getElementById("manage_favorites").addEventListener("click", async () =
 
 // Rely on label default behavior; do not re-toggle to avoid double flips
 
-// Also allow clicking the whole row to toggle
-document.querySelectorAll('.row-toggle').forEach((row) => {
-  row.addEventListener('click', (e) => {
-    // Avoid toggling when clicking on interactive controls inside the row (input or button)
-    const tag = e.target.tagName.toLowerCase();
-    if (tag === 'input' || tag === 'button' || e.target.closest('label.switch')) return;
-    const inputId = row.getAttribute('data-input');
-    if (!inputId) return;
-    const input = document.getElementById(inputId);
-    if (!input) return;
-    input.checked = !input.checked;
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  });
-});
+// Removed row-level toggling to avoid interference; rely on label/input clicks only
+
+// Removed label-level custom handler; native input handles clicks
 
 load();
