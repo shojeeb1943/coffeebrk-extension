@@ -18,6 +18,13 @@ main { display:flex; flex-direction: column; align-items:center; }
 .icon { width: 20px; height: 20px; border-radius: 6px; background: rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer; }
 .add { font-size: 28px; line-height: 72px; text-align:center; }
 .disabled { margin-top: 40px; color: var(--muted); text-align:center; }
+.disabled-card { display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px; border:1px solid #2a2a2e; border-radius:12px; background: rgba(127,127,127,0.06); min-width: 320px; }
+.disabled-card .title { color: var(--fg); font-weight: 600; }
+.disabled-card .desc { color: var(--muted); font-size: 13px; max-width: 360px; }
+.disabled-card .actions { display:flex; gap:8px; }
+.btn-pill { padding: 8px 12px; border-radius: 999px; border:1px solid #2a2a2e; background: transparent; color: inherit; cursor:pointer; }
+.btn-pill.primary { border-color: #9b6b2f; color: #fff; background: #9b6b2f; }
+.btn-pill:hover { filter: brightness(1.05); }
 .dialog { position: fixed; inset: 0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.35); }
 .dialog-inner { background: var(--bg); color: var(--fg); border:1px solid #ddd; border-radius: 12px; padding: 16px; min-width: 320px; }
 .dialog-row { display:flex; flex-direction:column; gap:6px; margin: 8px 0; }

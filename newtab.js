@@ -29,15 +29,22 @@ function showDisabled() {
   const main = document.getElementById("main");
   main.innerHTML = "";
   const msg = el("div", { class: "disabled" }, [
-    el("div", {}, ["Coffeebrk new tab is disabled."]),
-    el("div", {}, [
-      el("button", { id: "enable", class: "btn", style: "width:auto; height:auto; padding:8px 12px; border-radius:8px; margin-top:12px;" }, ["Enable"])
+    el("div", { class: "disabled-card" }, [
+      el("div", { class: "title" }, ["Coffeebrk new tab is disabled"]),
+      el("div", { class: "desc" }, ["Turn it on to see your quick-access favorites each time you open a new tab."]),
+      el("div", { class: "actions" }, [
+        el("button", { id: "enable", class: "btn-pill primary" }, ["Enable"]),
+        el("button", { id: "open_app", class: "btn-pill" }, ["Open Coffeebrk"])
+      ])
     ])
   ]);
   main.append(msg);
   document.getElementById("enable").addEventListener("click", async () => {
     await chrome.storage.sync.set({ use_as_new_tab: true });
     render();
+  });
+  document.getElementById("open_app").addEventListener("click", async () => {
+    await chrome.tabs.create({ url: "https://app.coffeebrk.ai/", active: true });
   });
 }
 

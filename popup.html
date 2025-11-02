@@ -18,16 +18,17 @@
     .row { display:flex; align-items:center; justify-content: space-between; gap: 10px; }
     .label { color: var(--fg); font-size: 13px; }
     .sub { color: var(--muted); font-size: 12px; }
-    .switch { position: relative; width: 42px; height: 24px; background: var(--border); border-radius: 999px; cursor: pointer; border:1px solid var(--border); }
-    .switch:has(input:checked) { background: var(--accent); border-color: var(--accent); }
-    .switch input { appearance: none; position: absolute; inset:0; margin:0; }
-    .knob { position:absolute; top:2px; left:2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .18s ease; }
-    .switch:has(input:checked) .knob { transform: translateX(18px); }
+    .switch { position: relative; width: 42px; height: 24px; border-radius: 999px; cursor: pointer; display:inline-block; }
+    .switch input { appearance: none; position: absolute; inset:0; margin:0; z-index:3; cursor: pointer; }
+    .track { position:absolute; inset:0; background: var(--border); border:1px solid var(--border); border-radius:999px; transition: background-color .18s ease, border-color .18s ease; }
+    .knob { position:absolute; top:2px; left:2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .18s ease; z-index:2; }
+    .switch input:checked ~ .track { background: var(--accent); border-color: var(--accent); }
+    .switch input:checked ~ .knob { transform: translateX(18px); }
     .controls { display:flex; gap: 8px; }
     .btn { padding: 8px 10px; border:1px solid var(--border); background: transparent; color: var(--fg); border-radius: 10px; cursor: pointer; font-size: 13px; }
     .btn:hover { background: rgba(127,127,127,.08); }
     input[type="time"] { padding: 6px 8px; border-radius: 8px; border:1px solid var(--border); background: transparent; color: var(--fg); font-size: 13px; }
-    .footer { display:flex; align-items:center; justify-content: space-between; margin-top: 8px; }
+    .footer { display:flex; align-items:center; justify-content: flex-start; margin-top: 8px; }
     a { color: var(--accent); text-decoration: none; font-size: 12px; }
     small { color: var(--muted); font-size: 11px; }
   </style>
@@ -48,6 +49,7 @@
           </div>
           <label class="switch" aria-label="Use as New Tab">
             <input id="use_as_new_tab" type="checkbox">
+            <span class="track"></span>
             <span class="knob"></span>
           </label>
         </div>
@@ -59,6 +61,7 @@
           </div>
           <label class="switch" aria-label="Daily background open">
             <input id="daily_open_enabled" type="checkbox">
+            <span class="track"></span>
             <span class="knob"></span>
           </label>
         </div>
@@ -80,7 +83,6 @@
 
     <div class="footer">
       <a href="https://coffeebrk.ai/privacy" target="_blank" rel="noopener noreferrer">Privacy</a>
-      <small>Uninstall opens feedback.coffeebrk.ai</small>
     </div>
   </div>
   <script src="popup.js"></script>
