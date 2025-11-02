@@ -139,8 +139,9 @@ async function render() {
   main.innerHTML = "";
   // Always show header favorites row (even if disabled)
   renderHeaderFavorites(favorites);
-  if (!use_as_new_tab) { showDisabled(); return; }
+  // If feed is enabled, it takes precedence regardless of use_as_new_tab
   if (show_feed) { renderFeed(); return; }
+  if (!use_as_new_tab) { showDisabled(); return; }
   // No body grid; favorites now live in header only
   return;
 }
