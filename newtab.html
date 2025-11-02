@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coffeebrk New Tab</title>
+  <link rel="stylesheet" href="newtab.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="logo"><img class="logo-img" src="icons/logo.svg" alt="Coffeebrk logo" /><span class="logo-text">Coffeebrk</span></div>
+    <input id="search" class="search" type="text" placeholder="Search or type a URL" aria-label="Search or type a URL" />
+  </header>
+  <main id="main"></main>
+  <div id="dlg" class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg_title_label">
+    <div class="dialog-inner">
+      <div class="dialog-row">
+        <label id="dlg_title_label" for="dlg_title">Title</label>
+        <input id="dlg_title" type="text" />
+      </div>
+      <div class="dialog-row">
+        <label for="dlg_url">URL</label>
+        <input id="dlg_url" type="url" placeholder="https://example.com" />
+      </div>
+      <div class="dialog-actions">
+        <button id="dlg_cancel" aria-label="Cancel">Cancel</button>
+        <button id="dlg_save" aria-label="Save">Save</button>
+      </div>
+    </div>
+  </div>
+  <script src="newtab.js"></script>
+</body>
+</html>

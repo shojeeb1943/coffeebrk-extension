@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coffeebrk Daily</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; width: 320px; }
+    .wrap { padding: 14px; background: var(--bg); color: var(--fg); }
+    @media (prefers-color-scheme: dark){ .wrap { --bg: #0b0b0c; --fg: #f1f1f1; --muted:#9aa0a6; --surface:#151519; --border:#24242a; --accent:#9b6b2f; } }
+    @media (prefers-color-scheme: light){ .wrap { --bg: #ffffff; --fg: #111; --muted:#555; --surface:#f6f6f7; --border:#e5e5e7; --accent:#8a5a1e; } }
+    .card { background: var(--surface); border:1px solid var(--border); border-radius: 12px; padding: 12px; }
+    .header { display:flex; align-items:center; gap:10px; margin-bottom: 10px; }
+    .logo-img { width: 22px; height: 22px; border-radius: 5px; display:block; }
+    .title { font-weight: 600; letter-spacing: .2px; }
+    .section { display:flex; flex-direction:column; gap: 10px; margin: 12px 0; }
+    .row { display:flex; align-items:center; justify-content: space-between; gap: 10px; }
+    .label { color: var(--fg); font-size: 13px; }
+    .sub { color: var(--muted); font-size: 12px; }
+    .switch { position: relative; width: 42px; height: 24px; background: var(--border); border-radius: 999px; cursor: pointer; border:1px solid var(--border); }
+    .switch:has(input:checked) { background: var(--accent); border-color: var(--accent); }
+    .switch input { appearance: none; position: absolute; inset:0; margin:0; }
+    .knob { position:absolute; top:2px; left:2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .18s ease; }
+    .switch:has(input:checked) .knob { transform: translateX(18px); }
+    .controls { display:flex; gap: 8px; }
+    .btn { padding: 8px 10px; border:1px solid var(--border); background: transparent; color: var(--fg); border-radius: 10px; cursor: pointer; font-size: 13px; }
+    .btn:hover { background: rgba(127,127,127,.08); }
+    input[type="time"] { padding: 6px 8px; border-radius: 8px; border:1px solid var(--border); background: transparent; color: var(--fg); font-size: 13px; }
+    .footer { display:flex; align-items:center; justify-content: space-between; margin-top: 8px; }
+    a { color: var(--accent); text-decoration: none; font-size: 12px; }
+    small { color: var(--muted); font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <img class="logo-img" src="icons/logo.svg" alt="Coffeebrk logo" />
+      <div class="title">Coffeebrk Daily</div>
+    </div>
+
+    <div class="card">
+      <div class="section">
+        <div class="row">
+          <div>
+            <div class="label">Use as New Tab</div>
+            <div class="sub">Show Coffeebrk favorites on new tab</div>
+          </div>
+          <label class="switch" aria-label="Use as New Tab">
+            <input id="use_as_new_tab" type="checkbox">
+            <span class="knob"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="label">Open Daily in Background</div>
+            <div class="sub">Opens app.coffeebrk.ai once a day without stealing focus</div>
+          </div>
+          <label class="switch" aria-label="Daily background open">
+            <input id="daily_open_enabled" type="checkbox">
+            <span class="knob"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="label">Open Time</div>
+            <div class="sub">Local time</div>
+          </div>
+          <input id="daily_open_time" type="time" step="60" aria-label="Daily open time" />
+        </div>
+
+        <div class="controls">
+          <button id="open_coffeebrk" class="btn" aria-label="Open Coffeebrk Daily">Open Coffeebrk</button>
+          <button id="manage_favorites" class="btn" aria-label="Manage Favorites">Manage Favorites</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <a href="https://coffeebrk.ai/privacy" target="_blank" rel="noopener noreferrer">Privacy</a>
+      <small>Uninstall opens feedback.coffeebrk.ai</small>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+ </body>
+</html>

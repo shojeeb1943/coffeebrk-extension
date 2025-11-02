@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Coffeebrk Daily — Chrome Extension",
+  "version": "1.0.0",
+  "description": "Quick AI/design favorites + optional new tab override. Daily Coffeebrk open.",
+  "author": "coffeebrk.ai",
+  "homepage_url": "https://coffeebrk.ai",
+  "action": {
+    "default_title": "Coffeebrk Daily",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "alarms",
+    "tabs"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

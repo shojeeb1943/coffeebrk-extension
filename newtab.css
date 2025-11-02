@@ -1,0 +1,26 @@
+:root{ color-scheme: light dark; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg, #fafafa); color: var(--fg, #111); }
+@media (prefers-color-scheme: dark){ body { --bg: #0b0b0c; --fg: #f1f1f1; --muted: #9aa0a6; } }
+@media (prefers-color-scheme: light){ body { --bg: #fafafa; --fg: #111; --muted: #444; } }
+.header { display:flex; gap:16px; align-items:center; padding: 32px; justify-content:center; }
+.logo { display:flex; align-items:center; gap:10px; font-weight: 700; letter-spacing: 0.3px; }
+.logo-img { width: 32px; height: 32px; border-radius: 8px; display:block; }
+.search { width: min(720px, 90vw); padding: 12px 14px; border-radius: 24px; border: 1px solid #ddd; background: transparent; color: inherit; }
+main { display:flex; flex-direction: column; align-items:center; }
+.favs { display:flex; gap:18px; flex-wrap: wrap; justify-content:center; margin-top: 24px; max-width: 900px; }
+.tile { width: 84px; text-align:center; position:relative; }
+.btn { all: unset; display:block; width:72px; height:72px; border-radius:50%; border:1px solid #ddd; overflow:hidden; background: rgba(127,127,127,0.05); cursor:pointer; }
+.btn:hover { background: rgba(127,127,127,0.12); }
+.tile img { width: 100%; height: 100%; object-fit: cover; }
+.tile-label { margin-top:8px; font-size: 12px; color: var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tile-actions { position:absolute; top:4px; right:6px; display:flex; gap:6px; opacity:0; transition: opacity .15s; }
+.tile:hover .tile-actions { opacity:1; }
+.icon { width: 20px; height: 20px; border-radius: 6px; background: rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.add { font-size: 28px; line-height: 72px; text-align:center; }
+.disabled { margin-top: 40px; color: var(--muted); text-align:center; }
+.dialog { position: fixed; inset: 0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.35); }
+.dialog-inner { background: var(--bg); color: var(--fg); border:1px solid #ddd; border-radius: 12px; padding: 16px; min-width: 320px; }
+.dialog-row { display:flex; flex-direction:column; gap:6px; margin: 8px 0; }
+.dialog-row input { padding: 8px 10px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: inherit; }
+.dialog-actions { display:flex; gap:8px; justify-content:flex-end; margin-top: 12px; }
+.dialog-actions button { padding: 8px 10px; border:1px solid #ddd; border-radius: 8px; background: transparent; color: inherit; cursor:pointer; }
