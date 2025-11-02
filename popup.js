@@ -45,4 +45,19 @@ document.getElementById("manage_favorites").addEventListener("click", async () =
 
 // Removed label-level custom handler; native input handles clicks
 
+// Ensure the daily_open_enabled switch is always responsive
+(() => {
+  const dailyInput = document.getElementById('daily_open_enabled');
+  const dailyLabel = dailyInput ? dailyInput.closest('label.switch') : null;
+  if (dailyLabel && dailyInput) {
+    dailyLabel.addEventListener('click', (e) => {
+      if (e.target === dailyInput) return; // native toggle
+      e.preventDefault();
+      e.stopPropagation();
+      dailyInput.checked = !dailyInput.checked;
+      dailyInput.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  }
+})();
+
 load();
